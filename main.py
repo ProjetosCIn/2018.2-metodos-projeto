@@ -1,10 +1,17 @@
 from sympy import sympify
 
-def euler(y0, t0, h, func):
+def euler(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	print(expr)
-	for step in range (0, h):
-		pass
+	print("y(", t0, ") = ", y0)
+	print("h = ", h)
+	lastY = y0
+	for step in range (0, qntSteps):
+		currentY = lastY + (expr.subs([("y", float(lastY)), ("t", t0)]))*h
+		lastY = float(currentY)
+		t0 += h
+
+		print(int(step + 1), " ", currentY)
 	return 0
 
 
@@ -16,7 +23,7 @@ def readFile(path):
 		for line in f:
 			inputs = line.split()
 			if(inputs[0] == 'euler'):
-				euler(float(inputs[1]), float(inputs[2]), int(inputs[3]), inputs[4])
+				euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
 			elif(inputs[0] == 'euler_inverso'):
 				pass
 			elif(inputs[0] == 'euler_aprimorado'):
