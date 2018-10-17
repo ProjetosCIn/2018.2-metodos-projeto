@@ -1,9 +1,10 @@
 from sympy import sympify
+from sympy.solvers import solve
+from sympy import Symbol
 
 def euler(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	print("Metodo de Euler")
-	print(expr)
 	print("y(", t0, ") = ", y0)
 	print("h = ", h)
 	lastY = y0
@@ -16,10 +17,28 @@ def euler(y0, t0, h, qntSteps, func):
 	print("")
 	return 0
 
+# Bonusss, sem metodo de previsao
+# yn+1 = yn + h * f(tn+1, yn+ 1)
+# yn + h * f(tn+1, yn+ 1) - yn+1 = 0
+def euler_inverso(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	print("Metodo de Euler Inverso")
+	print("y(", t0, ") = ", y0)
+	print("h = ", h)
+	lastY = y0
+	y = Symbol('y')
+	# y = yn+1
+	# lastY = yn
+	for step in range (0, qntSteps + 1):
+		print(int(step), " ", lastY)
+		lastY = solve((lastY + expr * h - y).subs("t", t0 + h), y)[0]
+		t0 += h
+	print("")
+	return 0
+
 def euler_aprimorado(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	print("Metodo de Euler Aprimorado")
-	print(expr)
 	print("y(", t0, ") = ", y0)
 	print("h = ", h)
 	lastY = y0
@@ -27,10 +46,13 @@ def euler_aprimorado(y0, t0, h, qntSteps, func):
 	for step in range (0, qntSteps + 1):
 		print(step, " ", currentY)
 
-		fn = expr.subs([("t", t0) , ("y", float(lastY))])
-		fn_1 = expr.subs([("t", t0 + 1), ("y", float(fn))])
+		# Este é o calculo de fn
+		# Lembrar que para calcular fn+1 , é necessário calcular o Y+1
+		# Para utilizar na fórmula
+		fn = expr.subs([("t", t0) , ("y", lastY)])
+		fn_1 = expr.subs([("t", t0 + h), ("y", fn * h + lastY)])
 
-		currentY = lastY + ((fn + fn_1) * h) / 2
+		currentY = lastY + (fn + fn_1) * h / 2
 		lastY = float(currentY)
 		t0 += h
 		
@@ -39,10 +61,8 @@ def euler_aprimorado(y0, t0, h, qntSteps, func):
 
 def runge_kutta(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
-	euler = sympify('yn + h * func')
 
 	print("Metodo de Runge-Kutta")
-	print(expr)
 	print("y(", t0, ") = ", y0)
 	print("h = ", h)
 	lastY = y0
@@ -69,13 +89,13 @@ def readFile(path):
 	with open(path) as f:
 		for line in f:
 			inputs = line.split()
-			if(inputs[0] == 'euler'):
-				euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'euler_inverso'):
-				pass
-			elif(inputs[0] == 'euler_aprimorado'):
-				euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'runge_kutta'):
-				runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			#if(inputs[0] == 'euler'):
+			#	euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			if(inputs[0] == 'euler_inverso'):
+				euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			#elif(inputs[0] == 'euler_aprimorado'):
+			#	euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			#elif(inputs[0] == 'runge_kutta'):
+			#	runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
 
 main()
