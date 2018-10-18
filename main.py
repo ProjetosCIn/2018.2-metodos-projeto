@@ -132,13 +132,14 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 def adam_bashforth_6(y, t0, h, qntSteps, func):
 	expr = sympify(func)
 	
-	ctes = [float(4277/1440), float(-2641/480), 4991/720, -3649/720, 959/480, -95/288]
-	y__5 = float(y[4])
-	y__4 = float(y[3])
-	y__3 = float(y[2])
-	y__2 = float(y[1])
-	y__1 = float(y[0])
+	ctes = [4277/1440, -2641/480, 4991/720, -3649/720, 959/480, -95/288]
 
+	y__5 = float(y0[0])
+	y__4 = float(y0[1])
+	y__3 = float(y0[2])
+	y__2 = float(y0[3])
+	y__1 = float(y0[4])
+	y =  float(y0[5])
 
 	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__5)
@@ -148,40 +149,32 @@ def adam_bashforth_6(y, t0, h, qntSteps, func):
 	print("2 ", y__3)
 	print("3 ", y__2)
 	print("4 ", y__1)
-	#Y_1 = yn+1
-	y = y__1
-	for step in range (5, qntSteps + 1):
+	print("5 ", y)
+
+	for step in range (6, qntSteps + 1):
 		
-		f = expr.subs([("t", t0), ("y", y)])
-		f__1 = expr.subs([("t", t0 + h), ("y", y__1)])
-		f__2 = expr.subs([("t", t0 + 2 * h), ("y", y__2)])
-		f__3 = expr.subs([("t", t0 + 3 * h), ("y", y__3)])
-		f__4 = expr.subs([("t", t0 + 4 * h), ("y", y__4)])
-		f__5 = expr.subs([("t", t0 + 5 * h), ("y", y__5)])
-		
-		print("")
-		print(ctes[5], f__5, y__5, t0 + h)
-		print(ctes[4], f__4, y__4, t0 + 2 *h)
-		print(ctes[3], f__3, y__3, t0 + 3 * h)
-		print(ctes[2], f__2, y__2, t0 + 4 * h)
-		print(ctes[1], f__1, y__1, t0 + 5 * h)
-		print("")
-		y = y + h*(				ctes[0] * f + 
-											ctes[1] * f__1 +
-											ctes[2] * f__2 +
-											ctes[3] * f__3 +
-											ctes[4] * f__4 +
-											ctes[5] * f__5 )
+		f = expr.subs([("t", t0 + 5 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 4 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 3 * h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0 + 2 * h), ("y", y__3)])
+		f__4 = expr.subs([("t", t0 + 1 * h ), ("y", y__4)])
+		f__5 = expr.subs([("t", t0 ), ("y", y__5)])
 
 		y__5 = y__4
 		y__4 = y__3
 		y__3 = y__2
 		y__2 = y__1
 		y__1 = y
-
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +
+											ctes[2] * f__2 +
+											ctes[3] * f__3 +
+											ctes[4] * f__4 +
+											ctes[5] * f__5)
 		print(step, " ", y)
 		t0 += h
 	return
+
 def adam_bashforth_7(y0, t0, h, qntSteps, func):
 	return
 def adam_bashforth_8(y0, t0, h, qntSteps, func):
@@ -190,22 +183,20 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 def adam_bashforth(input):
 	print(input)
 	ordem = input[len(input) - 1] 
-	print(ordem)
 	if(ordem == "2"):
-		adam_bashforth_2(input[0:1], float(input[1]), float(input[2]), int(input[3]), input[4])
+		adam_bashforth_5(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
 	elif(ordem == "3"):
-		adam_bashforth_3(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
+		adam_bashforth_3(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
 	elif(ordem == "4"):
-		adam_bashforth_4(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
+		adam_bashforth_5(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
 	elif(ordem == "5"):
-		print(input)
 		adam_bashforth_5(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
 	elif(ordem == "6"):
-		adam_bashforth_6(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
+		adam_bashforth_5(input[0:6], float(input[6]), float(input[7]), int(input[8]), input[9])
 	elif(ordem == "7"):
-		adam_bashforth_7(input[0:6], float(input[6]), float(input[7]), int(input[8]), input[9])
+		adam_bashforth_5(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
 	elif(ordem == "8"):
-		adam_bashforth_8(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
+		adam_bashforth_5(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
 	else:
 		print("Deu ruim")
 def main():
