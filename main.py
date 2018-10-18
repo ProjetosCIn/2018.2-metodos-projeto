@@ -84,11 +84,95 @@ def runge_kutta(y0, t0, h, qntSteps, func):
 
 
 def adam_bashforth_2(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [3/2, -1/2]
+
+	y__1 = float(y0[1])
+	y =  float(y0[2])
+
+	print("Metodo Adan-Bashforth")
+	print("y(", t0, ") = ", y__1)
+	print("h = ", h)
+	print("0 ", y__1)
+	print("1 ", y)
+	for step in range (2, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 1 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0), ("y", y__1)])
+
+		y__1 = y
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +)
+		print(step, " ", y)
+		t0 += h
 	return
+
 def adam_bashforth_3(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [23/12, -4/3, 5/12]
+
+	y__2 = float(y0[0])
+	y__1 = float(y0[1])
+	y =  float(y0[2])
+
+	print("Metodo Adan-Bashforth")
+	print("y(", t0, ") = ", y__2)
+	print("h = ", h)
+	print("0 ", y__2)
+	print("1 ", y__1)
+	print("2 ", y)
+	for step in range (3, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 2 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 1 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0), ("y", y__2)])
+
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +
+											ctes[2] * f__2 +)
+		print(step, " ", y)
+		t0 += h
 	return
+
 def adam_bashforth_4(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [55/24, -59/24, 37/24, -3/8]
+
+	y__3 = float(y0[0])
+	y__2 = float(y0[1])
+	y__1 = float(y0[2])
+	y =  float(y0[3])
+
+	print("Metodo Adan-Bashforth")
+	print("y(", t0, ") = ", y__3)
+	print("h = ", h)
+	print("0 ", y__3)
+	print("1 ", y__2)
+	print("2 ", y__1)
+	print("3 ", y)
+	for step in range (4, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 3 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 2 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 1 * h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0), ("y", y__3)])
+
+		y__3 = y__2
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +
+											ctes[2] * f__2 +
+											ctes[3] * f__3 + )
+		print(step, " ", y)
+		t0 += h
 	return
+
 def adam_bashforth_5(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	
