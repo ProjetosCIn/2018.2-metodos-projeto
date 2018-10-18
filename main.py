@@ -176,10 +176,113 @@ def adam_bashforth_6(y, t0, h, qntSteps, func):
 	return
 
 def adam_bashforth_7(y0, t0, h, qntSteps, func):
-	return
-def adam_bashforth_8(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [198721/60480, -18637/2520, 235183/20160, -10754/945, 135713/20160, -5603/2520, 19087/60480]
+
+	y__6 = float(y0[0])
+	y__5 = float(y0[1])
+	y__4 = float(y0[2])
+	y__3 = float(y0[3])
+	y__2 = float(y0[4])
+	y__1 = float(y0[5])
+	y =  float(y0[6])
+
+	print("Metodo Adan-Bashforth")
+	print("y(", t0, ") = ", y__6)
+	print("h = ", h)
+	print("0 ", y__6)
+	print("1 ", y__5)
+	print("2 ", y__4)
+	print("3 ", y__3)
+	print("4 ", y__2)
+	print("5 ", y__1)
+	print("6 ", y)
+
+	for step in range (7, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 6 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 5 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 4 * h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0 + 3 * h), ("y", y__3)])
+		f__4 = expr.subs([("t", t0 + 2 * h ), ("y", y__4)])
+		f__5 = expr.subs([("t", t0 + 1 * h ), ("y", y__5)])
+		f__6 = expr.subs([("t", t0 ), ("y", y__6)])
+
+		y__6 = y__5
+		y__5 = y__4
+		y__4 = y__3
+		y__3 = y__2
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +
+											ctes[2] * f__2 +
+											ctes[3] * f__3 +
+											ctes[4] * f__4 +
+											ctes[5] * f__5 +
+											ctes[6] * f__6)
+		print(step, " ", y)
+		t0 += h
 	return
 
+def adam_bashforth_8(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	[16083/4480, -1152169/120960, 242653/13440, -296053/13440, 2102243/120960, -115747/13440, 32863/13440, -5257/17280]
+
+	y__7 = float(y0[0])
+	y__6 = float(y0[1])
+	y__5 = float(y0[2])
+	y__4 = float(y0[3])
+	y__3 = float(y0[4])
+	y__2 = float(y0[5])
+	y__1 = float(y0[6])
+	y =  float(y0[7])
+
+	print("Metodo Adan-Bashforth")
+	print("y(", t0, ") = ", y__7)
+	print("h = ", h)
+	print("0 ", y__7)
+	print("1 ", y__6)
+	print("2 ", y__5)
+	print("3 ", y__4)
+	print("4 ", y__3)
+	print("5 ", y__2)
+	print("6 ", y__1)
+	print("7 ", y)
+
+	for step in range (8, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 7 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 6 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 5 * h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0 + 4 * h), ("y", y__3)])
+		f__4 = expr.subs([("t", t0 + 3 * h ), ("y", y__4)])
+		f__5 = expr.subs([("t", t0 + 2 * h ), ("y", y__5)])
+		f__6 = expr.subs([("t", t0 + 1 * h), ("y", y__6)])
+		f__7 = expr.subs([("t", t0 ), ("y", y__7)])
+
+		y__7 = y__6
+		y__6 = y__5
+		y__5 = y__4
+		y__4 = y__3
+		y__3 = y__2
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[0] * f + 
+											ctes[1] * f__1 +
+											ctes[2] * f__2 +
+											ctes[3] * f__3 +
+											ctes[4] * f__4 +
+											ctes[5] * f__5 +
+											ctes[6] * f__6 +
+											ctes[7] * f__7)
+		print(step, " ", y)
+		t0 += h
+	return
+
+# Função que chama o metodo de adam bashforth a depender do grau
 def adam_bashforth(input):
 	print(input)
 	ordem = input[len(input) - 1] 
