@@ -1,0 +1,4 @@
+{
+  "python.pythonPath": "virEnv/bin/python",
+  "python.linting.pylintEnabled": false
+}
