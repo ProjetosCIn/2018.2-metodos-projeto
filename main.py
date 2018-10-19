@@ -2,20 +2,27 @@ from sympy import sympify
 from sympy.solvers import solve
 from sympy import Symbol
 
-def euler(y0, t0, h, qntSteps, func):
+# Ordem == -1, significa que pode printar
+def euler(y0, t0, h, qntSteps, func, ordem):
 	expr = sympify(func)
-	print("Metodo de Euler")
-	print("y(", t0, ") = ", y0)
-	print("h = ", h)
+	
+	pontos = []
+	if(ordem == -1):
+		print("Metodo de Euler")
+		print("y(", t0, ") = ", y0)
+		print("h = ", h)
 	lastY = y0
 	currentY = lastY
 	for step in range (0, qntSteps + 1):
-		print(int(step), " ", currentY)
+		if(ordem == -1):
+			print(int(step), " ", currentY)
+		pontos.append(currentY)
 		currentY = lastY + (expr.subs([("y", float(lastY)), ("t", t0)]))*h
 		lastY = float(currentY)
 		t0 += h
-	print("")
-	return 0
+	if(ordem == -1):
+		print("")
+	return pontos[0:ordem]
 
 # Bonusss, sem metodo de previsao
 # yn+1 = yn + h * f(tn+1, yn+ 1)
@@ -91,7 +98,6 @@ def adam_bashforth_2(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[1])
 	y =  float(y0[2])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__1)
 	print("h = ", h)
 	print("0 ", y__1)
@@ -103,7 +109,7 @@ def adam_bashforth_2(y0, t0, h, qntSteps, func):
 
 		y__1 = y
 		y = y + h*(				ctes[0] * f + 
-											ctes[1] * f__1 +)
+											ctes[1] * f__1)
 		print(step, " ", y)
 		t0 += h
 	return
@@ -117,7 +123,6 @@ def adam_bashforth_3(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[1])
 	y =  float(y0[2])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__2)
 	print("h = ", h)
 	print("0 ", y__2)
@@ -133,7 +138,7 @@ def adam_bashforth_3(y0, t0, h, qntSteps, func):
 		y__1 = y
 		y = y + h*(				ctes[0] * f + 
 											ctes[1] * f__1 +
-											ctes[2] * f__2 +)
+											ctes[2] * f__2)
 		print(step, " ", y)
 		t0 += h
 	return
@@ -148,7 +153,6 @@ def adam_bashforth_4(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[2])
 	y =  float(y0[3])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__3)
 	print("h = ", h)
 	print("0 ", y__3)
@@ -168,7 +172,7 @@ def adam_bashforth_4(y0, t0, h, qntSteps, func):
 		y = y + h*(				ctes[0] * f + 
 											ctes[1] * f__1 +
 											ctes[2] * f__2 +
-											ctes[3] * f__3 + )
+											ctes[3] * f__3)
 		print(step, " ", y)
 		t0 += h
 	return
@@ -184,7 +188,6 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[3])
 	y =  float(y0[4])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__4)
 	print("h = ", h)
 	print("0 ", y__4)
@@ -213,7 +216,7 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 		t0 += h
 	return
 
-def adam_bashforth_6(y, t0, h, qntSteps, func):
+def adam_bashforth_6(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	
 	ctes = [4277/1440, -2641/480, 4991/720, -3649/720, 959/480, -95/288]
@@ -225,7 +228,6 @@ def adam_bashforth_6(y, t0, h, qntSteps, func):
 	y__1 = float(y0[4])
 	y =  float(y0[5])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__5)
 	print("h = ", h)
 	print("0 ", y__5)
@@ -272,7 +274,6 @@ def adam_bashforth_7(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[5])
 	y =  float(y0[6])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__6)
 	print("h = ", h)
 	print("0 ", y__6)
@@ -324,7 +325,6 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[6])
 	y =  float(y0[7])
 
-	print("Metodo Adan-Bashforth")
 	print("y(", t0, ") = ", y__7)
 	print("h = ", h)
 	print("0 ", y__7)
@@ -367,25 +367,38 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 	return
 
 # Função que chama o metodo de adam bashforth a depender do grau
-def adam_bashforth(input):
-	print(input)
+def adam_bashforth(input, printa):
+  
+	if(printa == True):
+		print("Metodo Adan-Bashforth")
 	ordem = input[len(input) - 1] 
 	if(ordem == "2"):
-		adam_bashforth_5(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
+		adam_bashforth_2(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
 	elif(ordem == "3"):
 		adam_bashforth_3(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
 	elif(ordem == "4"):
-		adam_bashforth_5(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
+		adam_bashforth_4(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
 	elif(ordem == "5"):
 		adam_bashforth_5(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
 	elif(ordem == "6"):
-		adam_bashforth_5(input[0:6], float(input[6]), float(input[7]), int(input[8]), input[9])
+		adam_bashforth_6(input[0:6], float(input[6]), float(input[7]), int(input[8]), input[9])
 	elif(ordem == "7"):
-		adam_bashforth_5(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
+		adam_bashforth_7(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
 	elif(ordem == "8"):
-		adam_bashforth_5(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
+		adam_bashforth_8(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
 	else:
 		print("Deu ruim")
+
+def adam_bashforth_by_euler(y0, t0, h, qntSteps, func, ordem):
+  
+	retornoEuler = euler(y0, t0, h, qntSteps, func, int(ordem))
+	entrada_adam_bashforth = retornoEuler + [t0, h, qntSteps, func, ordem]
+	print("Metodo Adan-Bashforth por Euler")
+	adam_bashforth(entrada_adam_bashforth, False)
+	return
+
+
+
 def main():
 	readFile('entradas.txt')
 
@@ -393,14 +406,23 @@ def readFile(path):
 	with open(path) as f:
 		for line in f:
 			inputs = line.split()
-			if(inputs[0] == 'euler'):
-				euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'euler_inverso'):
-				euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'euler_aprimorado'):
-				euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'runge_kutta'):
-				runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			elif(inputs[0] == 'adam_bashforth'):
-				adam_bashforth(inputs[1:])
+			# if(inputs[0] == 'euler'):
+			# 	euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
+			# elif(inputs[0] == 'euler_inverso'):
+			# 	euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			# elif(inputs[0] == 'euler_aprimorado'):
+			# 	euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			# elif(inputs[0] == 'runge_kutta'):
+			# 	runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
+			# elif(inputs[0] == 'adam_bashforth'):
+			# 	adam_bashforth(inputs[1:], True)
+			if(inputs[0] == 'adam_bashforth_by_euler'):
+				adam_bashforth_by_euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
+				# adam_bashforth_by_euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], input[6])
+			#elif(inputs[0] == 'adam_bashforth_by_euler_inverso'):
+			#	adam_bashforth_by_euler_inverso(inputs[1:])
+			#elif(inputs[0] == 'adam_bashforth_by_euler_aprimorado'):
+			#	adam_bashforth_by_euler_aprimorado(inputs[1:])
+			#elif(inputs[0] == 'adam_bashforth_by_runge_kutta'):
+			#	adam_bashforth_by_runge_kutta(inputs[1:])
 main()
