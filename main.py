@@ -2,26 +2,28 @@ from sympy import sympify
 from sympy.solvers import solve
 from sympy import Symbol
 
+f_out = open("saida.txt","w")
+
 # Ordem == -1, significa que pode printar
 def euler(y0, t0, h, qntSteps, func, ordem):
 	expr = sympify(func)
 	
 	pontos = []
 	if(ordem == -1):
-		print("Metodo de Euler")
-		print("y(", t0, ") = ", y0)
-		print("h = ", h)
+		f_out.write("Metodo de Euler \n")
+		f_out.write("y(" + str(t0) + ") = " + str(y0) + "\n")
+		f_out.write("h = " + str(h) + "\n")
 	lastY = y0
 	currentY = lastY
 	for step in range (0, qntSteps + 1):
 		if(ordem == -1):
-			print(int(step), " ", currentY)
+			f_out.write(str(step) + " " + str(currentY) + "\n")
 		pontos.append(currentY)
 		currentY = lastY + (expr.subs([("y", float(lastY)), ("t", t0)]))*h
 		lastY = float(currentY)
 		t0 += h
 	if(ordem == -1):
-		print("")
+		f_out.write("\n")
 	return pontos[0:ordem]
 
 # Bonusss, sem metodo de previsao
@@ -32,21 +34,21 @@ def euler_inverso(y0, t0, h, qntSteps, func, ordem):
 
 	pontos = []
 	if(ordem == -1):
-		print("Metodo de Euler Inverso")
-		print("y(", t0, ") = ", y0)
-		print("h = ", h)
+		f_out.write("Metodo de Euler Inverso\n")
+		f_out.write("y(" + str(t0) + ") = " + str(y0) + "\n")
+		f_out.write("h = " + str(h) + "\n")
 	lastY = y0
 	y = Symbol('y')
 	# y = yn+1
 	# lastY = yn
 	for step in range (0, qntSteps + 1):
 		if(ordem == -1):
-			print(int(step), " ", lastY)
+			f_out.write(str(step) + " " + str(lastY) + "\n")
 		pontos.append(lastY)
 		lastY = solve((lastY + expr * h - y).subs("t", t0 + h), y)[0]
 		t0 += h
 	if(ordem == -1):
-		print("")
+		f_out.write("\n")
 	return pontos[0:ordem]
 
 def euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
@@ -54,15 +56,15 @@ def euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
 
 	pontos = []
 	if(ordem == -1):
-		print("Metodo de Euler Aprimorado")
-		print("y(", t0, ") = ", y0)
-		print("h = ", h)
+		f_out.write("Metodo de Euler Aprimorado\n")
+		f_out.write("y(" + str(t0) + ") = " + str(y0) + "\n")
+		f_out.write("h = " + str(h) + "\n")
 	lastY = y0
 	currentY = lastY
 	for step in range (0, qntSteps + 1):
   		
 		if(ordem == -1):
-			print(step, " ", currentY)
+			f_out.write(str(step) + " " + str(currentY) + "\n")
 		pontos.append(currentY)
 		# Este é o calculo de fn
 		# Lembrar que para calcular fn+1 , é necessário calcular o Y+1
@@ -75,7 +77,7 @@ def euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
 		t0 += h
 	
 	if(ordem == - 1):
-		print("")
+		f_out.write("\n")
 	return pontos[0:ordem]
 
 def runge_kutta(y0, t0, h, qntSteps, func, ordem):
@@ -83,16 +85,16 @@ def runge_kutta(y0, t0, h, qntSteps, func, ordem):
 
 	pontos = []
 	if(ordem == -1):
-		print("Metodo de Runge-Kutta")
-		print("y(", t0, ") = ", y0)
-		print("h = ", h)
+		f_out.write("Metodo de Runge-Kutta\n")
+		f_out.write("y(" + str(t0) + ") = " + str(y0) + "\n")
+		f_out.write("h = " + str(h) + "\n")
 	lastY = y0
 	currentY = lastY
 
 	for step in range (0, qntSteps + 1):
 		
 		if(ordem == -1):
-			print(step, " ", currentY)
+			f_out.write(str(step) + " " + str(currentY) + "\n")
 		pontos.append(currentY)
 
 		k1 = expr.subs([("t", t0) , ("y", float(lastY))])
@@ -105,7 +107,7 @@ def runge_kutta(y0, t0, h, qntSteps, func, ordem):
 		t0 += h
 	
 	if(ordem == -1):
-		print("")	
+		f_out.write("\n")	
 	return pontos[0:ordem]
 
 
@@ -117,10 +119,10 @@ def adam_bashforth_2(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[1])
 	y =  float(y0[2])
 
-	print("y(", t0, ") = ", y__1)
-	print("h = ", h)
-	print("0 ", y__1)
-	print("1 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__1) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__1) + "\n")
+	f_out.write("1 " + str(y) + "\n")
 	for step in range (2, qntSteps + 1):
 		
 		f = expr.subs([("t", t0 + 1 * h), ("y", y)])
@@ -129,9 +131,9 @@ def adam_bashforth_2(y0, t0, h, qntSteps, func):
 		y__1 = y
 		y = y + h*(				ctes[0] * f + 
 											ctes[1] * f__1)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y) + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_3(y0, t0, h, qntSteps, func):
@@ -143,11 +145,11 @@ def adam_bashforth_3(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[1])
 	y =  float(y0[2])
 
-	print("y(", t0, ") = ", y__2)
-	print("h = ", h)
-	print("0 ", y__2)
-	print("1 ", y__1)
-	print("2 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__2) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__2) + "\n")
+	f_out.write("1 " + str(y__1) + "\n")
+	f_out.write("2 " + str(y) + "\n")
 	for step in range (3, qntSteps + 1):
 		
 		f = expr.subs([("t", t0 + 2 * h), ("y", y)])
@@ -159,9 +161,9 @@ def adam_bashforth_3(y0, t0, h, qntSteps, func):
 		y = y + h*(				ctes[0] * f + 
 											ctes[1] * f__1 +
 											ctes[2] * f__2)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y) + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_4(y0, t0, h, qntSteps, func):
@@ -174,12 +176,12 @@ def adam_bashforth_4(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[2])
 	y =  float(y0[3])
 
-	print("y(", t0, ") = ", y__3)
-	print("h = ", h)
-	print("0 ", y__3)
-	print("1 ", y__2)
-	print("2 ", y__1)
-	print("3 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__3) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__3) + "\n")
+	f_out.write("1 " + str(y__2) + "\n")
+	f_out.write("2 " + str(y__1) + "\n")
+	f_out.write("3 " + str(y) + "\n")
 	for step in range (4, qntSteps + 1):
 		
 		f = expr.subs([("t", t0 + 3 * h), ("y", y)])
@@ -194,9 +196,9 @@ def adam_bashforth_4(y0, t0, h, qntSteps, func):
 											ctes[1] * f__1 +
 											ctes[2] * f__2 +
 											ctes[3] * f__3)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y))
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_5(y0, t0, h, qntSteps, func):
@@ -210,13 +212,13 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[3])
 	y =  float(y0[4])
 
-	print("y(", t0, ") = ", y__4)
-	print("h = ", h)
-	print("0 ", y__4)
-	print("1 ", y__3)
-	print("2 ", y__2)
-	print("3 ", y__1)
-	print("4 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__4) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__4) + "\n")
+	f_out.write("1 " + str(y__3) + "\n")
+	f_out.write("2 " + str(y__2) + "\n")
+	f_out.write("3 " + str(y__1) + "\n")
+	f_out.write("4 " + str(y) + "\n")
 	for step in range (5, qntSteps + 1):
 		
 		f = expr.subs([("t", t0 + 4 * h), ("y", y)])
@@ -234,9 +236,9 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 											ctes[2] * f__2 +
 											ctes[3] * f__3 +
 											ctes[4] * f__4 )
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y)  + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_6(y0, t0, h, qntSteps, func):
@@ -251,14 +253,14 @@ def adam_bashforth_6(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[4])
 	y =  float(y0[5])
 
-	print("y(", t0, ") = ", y__5)
-	print("h = ", h)
-	print("0 ", y__5)
-	print("1 ", y__4)
-	print("2 ", y__3)
-	print("3 ", y__2)
-	print("4 ", y__1)
-	print("5 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__5) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__5) + "\n")
+	f_out.write("1 " + str(y__4) + "\n")
+	f_out.write("2 " + str(y__3) + "\n")
+	f_out.write("3 " + str(y__2) + "\n")
+	f_out.write("4 " + str(y__1) + "\n")
+	f_out.write("5 " + str(y) + "\n")
 
 	for step in range (6, qntSteps + 1):
 		
@@ -280,9 +282,9 @@ def adam_bashforth_6(y0, t0, h, qntSteps, func):
 											ctes[3] * f__3 +
 											ctes[4] * f__4 +
 											ctes[5] * f__5)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y) + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_7(y0, t0, h, qntSteps, func):
@@ -298,15 +300,15 @@ def adam_bashforth_7(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[5])
 	y =  float(y0[6])
 
-	print("y(", t0, ") = ", y__6)
-	print("h = ", h)
-	print("0 ", y__6)
-	print("1 ", y__5)
-	print("2 ", y__4)
-	print("3 ", y__3)
-	print("4 ", y__2)
-	print("5 ", y__1)
-	print("6 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__6) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__6) + "\n")
+	f_out.write("1 " + str(y__5) + "\n")
+	f_out.write("2 " + str(y__4) + "\n")
+	f_out.write("3 " + str(y__3) + "\n")
+	f_out.write("4 " + str(y__2) + "\n")
+	f_out.write("5 " + str(y__1) + "\n")
+	f_out.write("6 " + str(y) + "\n")
 
 	for step in range (7, qntSteps + 1):
 		
@@ -331,9 +333,9 @@ def adam_bashforth_7(y0, t0, h, qntSteps, func):
 											ctes[4] * f__4 +
 											ctes[5] * f__5 +
 											ctes[6] * f__6)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y) + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 def adam_bashforth_8(y0, t0, h, qntSteps, func):
@@ -350,16 +352,16 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 	y__1 = float(y0[6])
 	y =  float(y0[7])
 
-	print("y(", t0, ") = ", y__7)
-	print("h = ", h)
-	print("0 ", y__7)
-	print("1 ", y__6)
-	print("2 ", y__5)
-	print("3 ", y__4)
-	print("4 ", y__3)
-	print("5 ", y__2)
-	print("6 ", y__1)
-	print("7 ", y)
+	f_out.write("y(" + str(t0) + ") = " + str(y__7) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__7) + "\n")
+	f_out.write("1 " + str(y__6) + "\n")
+	f_out.write("2 " + str(y__5) + "\n")
+	f_out.write("3 " + str(y__4) + "\n")
+	f_out.write("4 " + str(y__3) + "\n")
+	f_out.write("5 " + str(y__2) + "\n")
+	f_out.write("6 " + str(y__1) + "\n")
+	f_out.write("7 " + str(y) + "\n")
 
 	for step in range (8, qntSteps + 1):
 		
@@ -387,16 +389,16 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 											ctes[5] * f__5 +
 											ctes[6] * f__6 +
 											ctes[7] * f__7)
-		print(step, " ", y)
+		f_out.write(str(step) + " " + str(y) + "\n")
 		t0 += h
-	print("")
+	f_out.write("\n")
 	return
 
 # Função que chama o metodo de adam bashforth a depender do grau
 def adam_bashforth(input, printa):
   
 	if(printa == True):
-		print("Metodo Adan-Bashforth")
+		f_out.write("Metodo Adan-Bashforth \n")
 	ordem = input[len(input) - 1] 
 	if(ordem == "2"):
 		adam_bashforth_2(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
@@ -413,13 +415,13 @@ def adam_bashforth(input, printa):
 	elif(ordem == "8"):
 		adam_bashforth_8(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
 	else:
-		print("Deu ruim")
+		f_out.write("Out of range\n")
 
 def adam_bashforth_by_euler(y0, t0, h, qntSteps, func, ordem):
   
 	retornoEuler = euler(y0, t0, h, qntSteps, func, int(ordem))
 	entrada_adam_bashforth = retornoEuler + [t0, h, qntSteps, func, ordem]
-	print("Metodo Adan-Bashforth por Euler")
+	f_out.write("Metodo Adan-Bashforth por Euler\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
@@ -427,7 +429,7 @@ def adam_bashforth_by_euler_inverso(y0, t0, h, qntSteps, func, ordem):
   
 	retornoEulerInverso = euler_inverso(y0, t0, h, qntSteps, func, int(ordem))
 	entrada_adam_bashforth = retornoEulerInverso + [t0, h, qntSteps, func, ordem]
-	print("Metodo Adan-Bashforth por Euler Inverso")
+	f_out.write("Metodo Adan-Bashforth por Euler Inverso\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
@@ -435,7 +437,7 @@ def adam_bashforth_by_euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
   
 	retornoEulerAprimorado = euler_aprimorado(y0, t0, h, qntSteps, func, int(ordem))
 	entrada_adam_bashforth = retornoEulerAprimorado + [t0, h, qntSteps, func, ordem]
-	print("Metodo Adan-Bashforth por Euler Aprimorado")
+	f_out.write("Metodo Adan-Bashforth por Euler Aprimorado\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
@@ -443,7 +445,7 @@ def adam_bashforth_by_runge_kutta(y0, t0, h, qntSteps, func, ordem):
   
 	retornoRunge = runge_kutta(y0, t0, h, qntSteps, func, int(ordem))
 	entrada_adam_bashforth = retornoRunge + [t0, h, qntSteps, func, ordem]
-	print("Metodo Adan-Bashforth por Runge-Kutta ( ordem = ", ordem, " )")
+	f_out.write("Metodo Adan-Bashforth por Runge-Kutta ( ordem = "+ ordem+ " )\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
@@ -451,6 +453,9 @@ def main():
 	readFile('entradas.txt')
 
 def readFile(path):
+  	
+	
+
 	with open(path) as f:
 		for line in f:
 			inputs = line.split()
@@ -472,4 +477,5 @@ def readFile(path):
 				adam_bashforth_by_euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
 			elif(inputs[0] == 'adam_bashforth_by_runge_kutta'):
 				adam_bashforth_by_runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
+	f_out.close()
 main()
