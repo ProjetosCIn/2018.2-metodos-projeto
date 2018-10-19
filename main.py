@@ -131,6 +131,7 @@ def adam_bashforth_2(y0, t0, h, qntSteps, func):
 											ctes[1] * f__1)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_3(y0, t0, h, qntSteps, func):
@@ -160,6 +161,7 @@ def adam_bashforth_3(y0, t0, h, qntSteps, func):
 											ctes[2] * f__2)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_4(y0, t0, h, qntSteps, func):
@@ -194,6 +196,7 @@ def adam_bashforth_4(y0, t0, h, qntSteps, func):
 											ctes[3] * f__3)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_5(y0, t0, h, qntSteps, func):
@@ -233,6 +236,7 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 											ctes[4] * f__4 )
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_6(y0, t0, h, qntSteps, func):
@@ -278,6 +282,7 @@ def adam_bashforth_6(y0, t0, h, qntSteps, func):
 											ctes[5] * f__5)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_7(y0, t0, h, qntSteps, func):
@@ -328,6 +333,7 @@ def adam_bashforth_7(y0, t0, h, qntSteps, func):
 											ctes[6] * f__6)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 def adam_bashforth_8(y0, t0, h, qntSteps, func):
@@ -383,6 +389,7 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 											ctes[7] * f__7)
 		print(step, " ", y)
 		t0 += h
+	print("")
 	return
 
 # Função que chama o metodo de adam bashforth a depender do grau
