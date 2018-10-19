@@ -448,14 +448,12 @@ def adam_bashforth_by_runge_kutta(y0, t0, h, qntSteps, func, ordem):
 	f_out.write("Metodo Adan-Bashforth por Runge-Kutta ( ordem = "+ ordem+ " )\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
-
+	
 def main():
 	readFile('entradas.txt')
 
 def readFile(path):
-  	
-	
-
+  		
 	with open(path) as f:
 		for line in f:
 			inputs = line.split()
