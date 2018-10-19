@@ -27,32 +27,43 @@ def euler(y0, t0, h, qntSteps, func, ordem):
 # Bonusss, sem metodo de previsao
 # yn+1 = yn + h * f(tn+1, yn+ 1)
 # yn + h * f(tn+1, yn+ 1) - yn+1 = 0
-def euler_inverso(y0, t0, h, qntSteps, func):
+def euler_inverso(y0, t0, h, qntSteps, func, ordem):
 	expr = sympify(func)
-	print("Metodo de Euler Inverso")
-	print("y(", t0, ") = ", y0)
-	print("h = ", h)
+
+	pontos = []
+	if(ordem == -1):
+		print("Metodo de Euler Inverso")
+		print("y(", t0, ") = ", y0)
+		print("h = ", h)
 	lastY = y0
 	y = Symbol('y')
 	# y = yn+1
 	# lastY = yn
 	for step in range (0, qntSteps + 1):
-		print(int(step), " ", lastY)
+		if(ordem == -1):
+			print(int(step), " ", lastY)
+		pontos.append(lastY)
 		lastY = solve((lastY + expr * h - y).subs("t", t0 + h), y)[0]
 		t0 += h
-	print("")
-	return 0
+	if(ordem == -1):
+		print("")
+	return pontos[0:ordem]
 
-def euler_aprimorado(y0, t0, h, qntSteps, func):
+def euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
 	expr = sympify(func)
-	print("Metodo de Euler Aprimorado")
-	print("y(", t0, ") = ", y0)
-	print("h = ", h)
+
+	pontos = []
+	if(ordem == -1):
+		print("Metodo de Euler Aprimorado")
+		print("y(", t0, ") = ", y0)
+		print("h = ", h)
 	lastY = y0
 	currentY = lastY
 	for step in range (0, qntSteps + 1):
-		print(step, " ", currentY)
-
+  		
+		if(ordem == -1):
+			print(step, " ", currentY)
+		pontos.append(currentY)
 		# Este é o calculo de fn
 		# Lembrar que para calcular fn+1 , é necessário calcular o Y+1
 		# Para utilizar na fórmula
@@ -62,22 +73,28 @@ def euler_aprimorado(y0, t0, h, qntSteps, func):
 		currentY = lastY + (fn + fn_1) * h / 2
 		lastY = float(currentY)
 		t0 += h
-		
-	print("")
-	return 0
+	
+	if(ordem == - 1):
+		print("")
+	return pontos[0:ordem]
 
-def runge_kutta(y0, t0, h, qntSteps, func):
+def runge_kutta(y0, t0, h, qntSteps, func, ordem):
 	expr = sympify(func)
 
-	print("Metodo de Runge-Kutta")
-	print("y(", t0, ") = ", y0)
-	print("h = ", h)
+	pontos = []
+	if(ordem == -1):
+		print("Metodo de Runge-Kutta")
+		print("y(", t0, ") = ", y0)
+		print("h = ", h)
 	lastY = y0
 	currentY = lastY
 
 	for step in range (0, qntSteps + 1):
-		print(step, " ", currentY)
 		
+		if(ordem == -1):
+			print(step, " ", currentY)
+		pontos.append(currentY)
+
 		k1 = expr.subs([("t", t0) , ("y", float(lastY))])
 		k2 = expr.subs([("t", t0 + h / 2) , ("y", float(lastY) + h / 2 * k1)])
 		k3 = expr.subs([("t", t0 + h / 2) , ("y", float(lastY) + h / 2 * k2)])
@@ -86,8 +103,10 @@ def runge_kutta(y0, t0, h, qntSteps, func):
 		currentY = lastY + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
 		lastY = float(currentY)
 		t0 += h
-	print("")	
-	return 0
+	
+	if(ordem == -1):
+		print("")	
+	return pontos[0:ordem]
 
 
 def adam_bashforth_2(y0, t0, h, qntSteps, func):
@@ -397,7 +416,29 @@ def adam_bashforth_by_euler(y0, t0, h, qntSteps, func, ordem):
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
+def adam_bashforth_by_euler_inverso(y0, t0, h, qntSteps, func, ordem):
+  
+	retornoEulerInverso = euler_inverso(y0, t0, h, qntSteps, func, int(ordem))
+	entrada_adam_bashforth = retornoEulerInverso + [t0, h, qntSteps, func, ordem]
+	print("Metodo Adan-Bashforth por Euler Inverso")
+	adam_bashforth(entrada_adam_bashforth, False)
+	return
 
+def adam_bashforth_by_euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
+  
+	retornoEulerAprimorado = euler_aprimorado(y0, t0, h, qntSteps, func, int(ordem))
+	entrada_adam_bashforth = retornoEulerAprimorado + [t0, h, qntSteps, func, ordem]
+	print("Metodo Adan-Bashforth por Euler Aprimorado")
+	adam_bashforth(entrada_adam_bashforth, False)
+	return
+
+def adam_bashforth_by_runge_kutta(y0, t0, h, qntSteps, func, ordem):
+  
+	retornoRunge = runge_kutta(y0, t0, h, qntSteps, func, int(ordem))
+	entrada_adam_bashforth = retornoRunge + [t0, h, qntSteps, func, ordem]
+	print("Metodo Adan-Bashforth por Runge-Kutta ( ordem = ", ordem, " )")
+	adam_bashforth(entrada_adam_bashforth, False)
+	return
 
 def main():
 	readFile('entradas.txt')
@@ -406,23 +447,22 @@ def readFile(path):
 	with open(path) as f:
 		for line in f:
 			inputs = line.split()
-			# if(inputs[0] == 'euler'):
-			# 	euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
-			# elif(inputs[0] == 'euler_inverso'):
-			# 	euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			# elif(inputs[0] == 'euler_aprimorado'):
-			# 	euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			# elif(inputs[0] == 'runge_kutta'):
-			# 	runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5])
-			# elif(inputs[0] == 'adam_bashforth'):
-			# 	adam_bashforth(inputs[1:], True)
-			if(inputs[0] == 'adam_bashforth_by_euler'):
+			if(inputs[0] == 'euler'):
+				euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
+			elif(inputs[0] == 'euler_inverso'):
+				euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
+			elif(inputs[0] == 'euler_aprimorado'):
+				euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
+			elif(inputs[0] == 'runge_kutta'):
+				runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], -1)
+			elif(inputs[0] == 'adam_bashforth'):
+				adam_bashforth(inputs[1:], True)
+			elif(inputs[0] == 'adam_bashforth_by_euler'):
 				adam_bashforth_by_euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
-				# adam_bashforth_by_euler(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], input[6])
-			#elif(inputs[0] == 'adam_bashforth_by_euler_inverso'):
-			#	adam_bashforth_by_euler_inverso(inputs[1:])
-			#elif(inputs[0] == 'adam_bashforth_by_euler_aprimorado'):
-			#	adam_bashforth_by_euler_aprimorado(inputs[1:])
-			#elif(inputs[0] == 'adam_bashforth_by_runge_kutta'):
-			#	adam_bashforth_by_runge_kutta(inputs[1:])
+			elif(inputs[0] == 'adam_bashforth_by_euler_inverso'):
+				adam_bashforth_by_euler_inverso(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
+			elif(inputs[0] == 'adam_bashforth_by_euler_aprimorado'):
+				adam_bashforth_by_euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
+			elif(inputs[0] == 'adam_bashforth_by_runge_kutta'):
+				adam_bashforth_by_runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
 main()
