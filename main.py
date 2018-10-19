@@ -549,23 +549,22 @@ def adam_multon_7(y0, t0, h, qntSteps, func):
 def adam_multon(input, printa):
   
 	if(printa == True):
-		f_out.write("Metodo Adan-Bashforth \n")
+		f_out.write("Metodo Adan-Multon \n")
 	ordem = input[len(input) - 1] 
 	if(ordem == "2"):
-		adam_bashforth_2(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
+		adam_multon_2(input[0:1], float(input[1]), float(input[2]), int(input[3]), input[4])
 	elif(ordem == "3"):
-		adam_bashforth_3(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
+		adam_multon_3(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
 	elif(ordem == "4"):
-		adam_bashforth_4(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
+		adam_multon_4(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
 	elif(ordem == "5"):
-		adam_bashforth_5(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
+		adam_multon_5(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
 	elif(ordem == "6"):
-		print(input)
 		adam_multon_6(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
 	elif(ordem == "7"):
-		adam_bashforth_7(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
+		adam_multon_7(input[0:6], float(input[6]), float(input[7]), int(input[8]), input[9])
 	elif(ordem == "8"):
-		adam_bashforth_8(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
+		adam_multon_8(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
 	else:
 		f_out.write("Out of range\n")
 	
