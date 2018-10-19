@@ -395,6 +395,7 @@ def adam_bashforth_8(y0, t0, h, qntSteps, func):
 	return
 
 # Função que chama o metodo de adam bashforth a depender do grau
+#
 def adam_bashforth(input, printa):
   
 	if(printa == True):
@@ -449,6 +450,7 @@ def adam_bashforth_by_runge_kutta(y0, t0, h, qntSteps, func, ordem):
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
 
+# Adam multon resolvida com solução implicita
 def adam_multon_6(y0, t0, h, qntSteps, func):
 	expr = sympify(func)
 	
