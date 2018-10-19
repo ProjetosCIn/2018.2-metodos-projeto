@@ -18,7 +18,7 @@ Em uma máquina Linux execute os seguintes comandos no terminal, estando na past
 | adam_bashforth_by_euler_inverso | O | X | X | X | X | X | O |
 | adam_bashforth_by_euler_aprimorado | O | X | X | X | X | X | O |
 | adam_bashforth_by_runge_kutta | O | X | X | X | X | X | O |
-
+| adam_multon | X | O | X | X | X | X | X |
 
 X - Necessário
 

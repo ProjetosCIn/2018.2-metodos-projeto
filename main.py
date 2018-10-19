@@ -448,6 +448,126 @@ def adam_bashforth_by_runge_kutta(y0, t0, h, qntSteps, func, ordem):
 	f_out.write("Metodo Adan-Bashforth por Runge-Kutta ( ordem = "+ ordem+ " )\n")
 	adam_bashforth(entrada_adam_bashforth, False)
 	return
+
+def adam_multon_6(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [19087/60480, 2713/2520, -15487/20160, 586/945, -6737/20160, -95/288]
+	ctes = [95/288, 1427/1440, -133/240, 241/720, -173/1440, 3/160]
+
+	y__4 = float(y0[0])
+	y__3 = float(y0[1])
+	y__2 = float(y0[2])
+	y__1 = float(y0[3])
+	y =  float(y0[4])
+
+	f_out.write("y(" + str(t0) + ") = " + str(y__4) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__4) + "\n")
+	f_out.write("1 " + str(y__3) + "\n")
+	f_out.write("2 " + str(y__2) + "\n")
+	f_out.write("3 " + str(y__1) + "\n")
+	f_out.write("4 " + str(y) + "\n")
+
+	for step in range (5, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 4 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 3 *  h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 2 * h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0 + 1 * h), ("y", y__3)])
+		f__4 = expr.subs([("t", t0 ), ("y", y__4)])
+
+		y__4 = y__3
+		y__3 = y__2
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[1] * f + 
+											ctes[2] * f__1 +
+											ctes[3] * f__2 +
+											ctes[4] * f__3 +
+											ctes[5] * f__4)
+		ySymbol = Symbol('y')
+		print((expr * h * ctes[0] - ySymbol).subs("t", t0 + 5 * h))
+		print(solve((expr * h * ctes[0] - ySymbol).subs("t", t0 + 5 * h), ySymbol))
+		y = solve((y + expr * h * ctes[0] -ySymbol).subs("t", t0 + 5 * h), ySymbol)[0]
+		f_out.write(str(step) + " " + str(y) + "\n")
+		t0 += h
+	f_out.write("\n")
+	return
+
+def adam_multon_7(y0, t0, h, qntSteps, func):
+	expr = sympify(func)
+	
+	ctes = [19087/60480, 2713/2520, -15487/20160, 586/945, -6737/20160, -95/288]
+
+	y__5 = float(y0[0])
+	y__4 = float(y0[1])
+	y__3 = float(y0[2])
+	y__2 = float(y0[3])
+	y__1 = float(y0[4])
+	y =  float(y0[5])
+
+	f_out.write("y(" + str(t0) + ") = " + str(y__5) + "\n")
+	f_out.write("h = " + str(h) + "\n")
+	f_out.write("0 " + str(y__5) + "\n")
+	f_out.write("1 " + str(y__4) + "\n")
+	f_out.write("2 " + str(y__3) + "\n")
+	f_out.write("3 " + str(y__2) + "\n")
+	f_out.write("4 " + str(y__1) + "\n")
+	f_out.write("5 " + str(y) + "\n")
+
+	for step in range (6, qntSteps + 1):
+		
+		f = expr.subs([("t", t0 + 5 * h), ("y", y)])
+		f__1 = expr.subs([("t", t0 + 4 * h), ("y", y__1)])
+		f__2 = expr.subs([("t", t0 + 3 *  h), ("y", y__2)])
+		f__3 = expr.subs([("t", t0 + 2 * h), ("y", y__3)])
+		f__4 = expr.subs([("t", t0 + 1 * h), ("y", y__4)])
+		f__5 = expr.subs([("t", t0 ), ("y", y__5)])
+
+		y__5 = y__4
+		y__4 = y__3
+		y__3 = y__2
+		y__2 = y__1
+		y__1 = y
+		y = y + h*(				ctes[1] * f + 
+											ctes[2] * f__1 +
+											ctes[3] * f__2 +
+											ctes[4] * f__3 +
+											ctes[5] * f__4 +
+											ctes[6] * f__5)
+		ySymbol = Symbol('y')
+		y = solve((y + expr * h * ctes[0] -ySymbol).subs("t", t0 + 6 * h), ySymbol)[0]
+		f_out.write(str(step) + " " + str(y) + "\n")
+		t0 += h
+	f_out.write("\n")
+	return
+
+
+
+# Função que chama o metodo de adam bashforth a depender do grau
+def adam_multon(input, printa):
+  
+	if(printa == True):
+		f_out.write("Metodo Adan-Bashforth \n")
+	ordem = input[len(input) - 1] 
+	if(ordem == "2"):
+		adam_bashforth_2(input[0:2], float(input[2]), float(input[3]), int(input[4]), input[5])
+	elif(ordem == "3"):
+		adam_bashforth_3(input[0:3], float(input[3]), float(input[4]), int(input[5]), input[6])
+	elif(ordem == "4"):
+		adam_bashforth_4(input[0:4], float(input[4]), float(input[5]), int(input[6]), input[7])
+	elif(ordem == "5"):
+		adam_bashforth_5(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
+	elif(ordem == "6"):
+		print(input)
+		adam_multon_6(input[0:5], float(input[5]), float(input[6]), int(input[7]), input[8])
+	elif(ordem == "7"):
+		adam_bashforth_7(input[0:7], float(input[7]), float(input[8]), int(input[9]), input[10])
+	elif(ordem == "8"):
+		adam_bashforth_8(input[0:8], float(input[8]), float(input[9]), int(input[10]), input[11])
+	else:
+		f_out.write("Out of range\n")
 	
 def main():
 	readFile('entradas.txt')
@@ -475,5 +595,7 @@ def readFile(path):
 				adam_bashforth_by_euler_aprimorado(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
 			elif(inputs[0] == 'adam_bashforth_by_runge_kutta'):
 				adam_bashforth_by_runge_kutta(float(inputs[1]), float(inputs[2]), float(inputs[3]), int(inputs[4]), inputs[5], inputs[6])
+			elif(inputs[0] == 'adam_multon'):
+				adam_multon(inputs[1:], True)
 	f_out.close()
 main()
