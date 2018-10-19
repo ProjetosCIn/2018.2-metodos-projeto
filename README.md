@@ -35,7 +35,7 @@ adam_bashforth_by_euler 0 0 0.1 20 1-t+4*y 6
 
 ```
 
-Um arquivo *saidas.txt* será gerado na pasta raiz do projeto.
+Um arquivo *saida.txt* com os pontos resultantes de cada método será gerado na pasta raiz do projeto.
 
 ### Pre-requisitos
 
