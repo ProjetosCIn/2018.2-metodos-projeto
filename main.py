@@ -17,7 +17,7 @@ def euler(y0, t0, h, qntSteps, func, ordem):
 	currentY = lastY
 	for step in range (0, qntSteps + 1):
 		if(ordem == -1):
-			f_out.write(str(step) + " " + str(currentY) + "\n")
+			f_out.write(str(currentY) + "\t")
 		pontos.append(currentY)
 		currentY = lastY + (expr.subs([("y", float(lastY)), ("t", t0)]))*h
 		lastY = float(currentY)
@@ -43,7 +43,7 @@ def euler_inverso(y0, t0, h, qntSteps, func, ordem):
 	# lastY = yn
 	for step in range (0, qntSteps + 1):
 		if(ordem == -1):
-			f_out.write(str(step) + " " + str(lastY) + "\n")
+			f_out.write(str(lastY) + "\t")
 		pontos.append(lastY)
 		lastY = solve((lastY + expr * h - y).subs("t", t0 + h), y)[0]
 		t0 += h
@@ -64,7 +64,7 @@ def euler_aprimorado(y0, t0, h, qntSteps, func, ordem):
 	for step in range (0, qntSteps + 1):
   		
 		if(ordem == -1):
-			f_out.write(str(step) + " " + str(currentY) + "\n")
+			f_out.write(str(currentY) + "\t")
 		pontos.append(currentY)
 		# Este é o calculo de fn
 		# Lembrar que para calcular fn+1 , é necessário calcular o Y+1
@@ -94,7 +94,7 @@ def runge_kutta(y0, t0, h, qntSteps, func, ordem):
 	for step in range (0, qntSteps + 1):
 		
 		if(ordem == -1):
-			f_out.write(str(step) + " " + str(currentY) + "\n")
+			f_out.write(str(currentY) + "\t")
 		pontos.append(currentY)
 
 		k1 = expr.subs([("t", t0) , ("y", float(lastY))])
@@ -214,11 +214,11 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 
 	f_out.write("y(" + str(t0) + ") = " + str(y__4) + "\n")
 	f_out.write("h = " + str(h) + "\n")
-	f_out.write("0 " + str(y__4) + "\n")
-	f_out.write("1 " + str(y__3) + "\n")
-	f_out.write("2 " + str(y__2) + "\n")
-	f_out.write("3 " + str(y__1) + "\n")
-	f_out.write("4 " + str(y) + "\n")
+	f_out.write(str(y__4) + "\t")
+	f_out.write(str(y__3) + "\t")
+	f_out.write(str(y__2) + "\t")
+	f_out.write(str(y__1) + "\t")
+	f_out.write(str(y) + "\t")
 	for step in range (5, qntSteps + 1):
 		
 		f = expr.subs([("t", t0 + 4 * h), ("y", y)])
@@ -236,7 +236,7 @@ def adam_bashforth_5(y0, t0, h, qntSteps, func):
 											ctes[2] * f__2 +
 											ctes[3] * f__3 +
 											ctes[4] * f__4 )
-		f_out.write(str(step) + " " + str(y)  + "\n")
+		f_out.write(str(y)  + "\t")
 		t0 += h
 	f_out.write("\n")
 	return
@@ -465,11 +465,11 @@ def adam_multon_6(y0, t0, h, qntSteps, func):
 
 	f_out.write("y(" + str(t0) + ") = " + str(y__4) + "\n")
 	f_out.write("h = " + str(h) + "\n")
-	f_out.write("0 " + str(y__4) + "\n")
-	f_out.write("1 " + str(y__3) + "\n")
-	f_out.write("2 " + str(y__2) + "\n")
-	f_out.write("3 " + str(y__1) + "\n")
-	f_out.write("4 " + str(y) + "\n")
+	f_out.write(str(y__4) + "\t")
+	f_out.write(str(y__3) + "\t")
+	f_out.write(str(y__2) + "\t")
+	f_out.write(str(y__1) + "\t")
+	f_out.write(str(y) + "\t")
 
 	for step in range (5, qntSteps + 1):
 		
@@ -492,7 +492,7 @@ def adam_multon_6(y0, t0, h, qntSteps, func):
 		print((expr * h * ctes[0] - ySymbol).subs("t", t0 + 5 * h))
 		print(solve((expr * h * ctes[0] - ySymbol).subs("t", t0 + 5 * h), ySymbol))
 		y = solve((y + expr * h * ctes[0] -ySymbol).subs("t", t0 + 5 * h), ySymbol)[0]
-		f_out.write(str(step) + " " + str(y) + "\n")
+		f_out.write(str(y) + "\t")
 		t0 += h
 	f_out.write("\n")
 	return
@@ -571,6 +571,11 @@ def adam_multon(input, printa):
 		f_out.write("Out of range\n")
 	
 def main():
+	func = sympify('3/16 * 2.71^(4*t) + t /4 - 3/16')
+	currentY = 0
+	for step in range (0, 21):
+		currentY = func.subs([("t", step * 0.1)])
+		f_out.write(str(currentY) + "\t")
 	readFile('entradas.txt')
 
 def readFile(path):
